@@ -1,5 +1,5 @@
 # Ring Oscillator PUF Authentication System
-## Hardware Root-of-Trust on a Xilinx Artix-7 FPGA: Architecture, Operation, and Pin Reference
+## A Physical Unclonable Function for FPGA-Based Device Authentication
 
 ---
 
