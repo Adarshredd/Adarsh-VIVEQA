@@ -396,6 +396,44 @@ ENR:1
 
 ---
 
-## 7. Conclusion
+## 7. What the Outputs Actually Mean (Plain-Language Guide)
+
+The LCD already tells you what's happening in plain English, but the LEDs, buzzer, and 7-segment display communicate the same information through light patterns, sound, and numbers. Here's what each one is telling you at a glance, without needing to read any code.
+
+### 7.1 The 8 LEDs — "What is the system doing right now?"
+
+Think of the 8 LEDs as a simple status light, similar to how a phone shows different blink patterns for charging, low battery, or a notification. Each authentication stage has its own unique pattern so you can tell what's happening just by glancing at the board:
+
+- **A single slow blinking light** means the system is idle and waiting for you to press a button.
+- **A light that runs across the row from left to right** means it's enrolling a new fingerprint for the current switch setting.
+- **One light staying solidly on** confirms that enrollment finished and was saved.
+- **A light running from right to left** means it's authenticating — checking your current fingerprint against the saved one.
+- **All 8 lights blinking together quickly** means it's in the middle of comparing the two fingerprints.
+- **All 8 lights solid on** means authentication passed — your device recognized itself.
+- **Lights blinking in a checkerboard pattern** means authentication failed — the fingerprint didn't match closely enough.
+- **Two lights chasing each other** means it's taking a one-off measurement (no saving or comparing).
+- **The lights directly spelling out the 8-bit response in binary** means a measurement just finished — you can literally read the fingerprint off the LEDs.
+- **All lights blinking very fast** means the enrollment memory is being wiped.
+
+### 7.2 The Buzzer — "Did it pass or fail?"
+
+The buzzer is the simplest output to understand: it only ever does two things, and only at the very end of an authentication attempt — it stays completely silent the rest of the time.
+
+- **One short, higher-pitched beep** means authentication passed. Think of it like the friendly "ding" of a successful tap-to-pay.
+- **Three short, lower-pitched beeps in a row** means authentication failed. The repeated lower tone is meant to sound noticeably different from the pass tone, so you can tell pass from fail with your eyes closed.
+
+### 7.3 The 7-Segment Display — "Show me the actual numbers"
+
+While the LEDs and buzzer give a quick yes/no/status feel, the 7-segment display exists for when you want to see the **real underlying numbers** behind the system's decision, similar to how a digital scale shows you an exact weight instead of just a green or red light.
+
+- **Most of the time (idle state):** the left half of the display shows your current switch setting (the *challenge* you've selected), and the right half shows the live fingerprint (*response*) the chip is generating for it right now.
+- **Right after a pass or fail result:** the display switches to show the *saved* fingerprint side-by-side with the *just-measured* fingerprint, so you can visually compare the two yourself and see exactly how close (or far apart) they were.
+- **Right after a plain measurement:** the display shows the raw oscillator speed numbers themselves — two 16-bit counts representing how many times each of the two selected ring oscillators "ticked" during the measurement window. This is the closest you can get to seeing the actual physical randomness of the silicon, before it gets boiled down into a single 0 or 1.
+
+In short: the **LEDs and buzzer** are designed to be understood at a glance or by ear, like a status indicator on any consumer device, while the **7-segment display and LCD** exist for when you want the full numeric detail behind that status.
+
+---
+
+## 8. Conclusion
 
 This project implements a complete, hardware-verified **Ring Oscillator Physical Unclonable Function authentication system** on a Xilinx Artix-7 FPGA, demonstrating how manufacturing-level silicon randomness can be harvested into a reproducible, unclonable device fingerprint. The design combines a 16-oscillator PUF array with placement-constrained primitives, a full challenge-response and Hamming-distance authentication pipeline, and five independently modular output peripherals (LCD, 7-segment display, status LEDs, buzzer, and UART), all unified under a single shared authentication state machine. The system was verified to produce stable, repeatable PUF responses with strong inter-oscillator frequency separation and zero observed bit-flip errors across repeated measurement trials, confirming the practical viability of RO-PUFs as a lightweight hardware root-of-trust.
