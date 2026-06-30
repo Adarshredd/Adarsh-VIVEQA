@@ -1,0 +1,53 @@
+PROBLEM 3: D FLIP-FLOP (DFF)
+Problem Definition: Implement a basic D flip-flop with asynchronous reset. Captures input D on rising clock edge and produces outputs Q and Q̄ (complement).
+Code:
+module dff(clk,rst,D,Q,Qb);
+input clk,rst;
+input D;
+output reg Q,Qb;
+
+always @(posedge clk)begin
+	if (rst)begin
+		Q <=1'b0;
+		Qb <=1'b1;
+	end else begin
+	    Q <=D;
+	    Qb <=~D;
+	end
+end
+endmodule
+
+module dff_tb();
+reg clk,rst;
+reg D;
+
+wire Q,Qb;
+
+dff dut(clk,rst,D,Q,Qb);
+
+always #5 clk=~clk;
+
+initial begin
+clk=1'b0;
+rst=1'b0;
+D=1'b0;
+#12; rst=1'b1;
+#12; rst=1'b0;
+#12; D=1'b1;
+#12; D=1'b0;
+#12; D=1'b1;
+#12; D=1'b1;
+#12; D=1'b0;
+#12; D=1'b0;
+#12; D=1'b1;
+#12; D=1'b1;
+#12; D=1'b0;
+#12; D=1'b1;
+#12; D=1'b0;
+#12; D=1'b1;
+#12; D=1'b0;
+#12; D=1'b1;
+$finish;
+end
+endmodule
+

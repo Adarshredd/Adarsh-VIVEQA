@@ -1,0 +1,65 @@
+PROBLEM 6: ARITHMETIC LOGIC UNIT (ALU)
+Problem Definition: Design a 4-bit ALU supporting 12 operations:
+Control 0-1: Addition & Subtraction
+Control 2-4: Bitwise operations (AND, OR, XOR)
+Control 5-6: Shift operations (Right 2, Left 2)
+Control 7-9: Multiply, Increment, Decrement
+Control 10-11: Bitwise NOT operations
+Outputs: 4-bit result, Zero flag, Negative flag
+Code:
+module alu(A,B,control,result,zero,negative);
+input signed [3:0]A,B;
+input [3:0]control;
+output reg [3:0]result;
+output zero,negative;
+
+always @(*)begin
+ case(control)
+ 4'd0:result=A+B;
+ 4'd1:result=A-B;
+ 4'd2:result=A&B;
+ 4'd3:result=A|B;
+ 4'd4:result=A^B;
+ 4'd5:result=A>>2;
+ 4'd6:result=A<<2;
+ 4'd7:result=A*B;
+ 4'd8:result=A+1;
+ 4'd9:result=A-1;
+ 4'd10:result=~A;
+ 4'd11:result=~B;
+ default: result=4'd0;
+ endcase
+end
+
+assign zero=~|result;
+assign negative=result[3];
+
+endmodule
+
+module alu_tb();
+reg signed[3:0]A,B;
+reg [3:0]control;
+wire [3:0]result;
+wire zero,negative;
+
+alu dut(A,B,control,result,zero,negative);
+
+initial begin
+A=4'd0;B=4'd0;control=4'd0;
+#5 A=4'd1;B=4'd2;control=4'd0;
+#5 A=4'd2;B=4'd1;control=4'd1;
+#5 A=4'd1;B=4'd2;control=4'd2;
+#5 A=4'd1;B=4'd2;control=4'd3;
+#5 A=4'd1;B=4'd2;control=4'd4;
+#5 A=4'd1;B=4'd2;control=4'd5;
+#5 A=4'd1;B=4'd2;control=4'd6;
+#5 A=4'd1;B=4'd2;control=4'd7;
+#5 A=4'd1;B=4'd2;control=4'd8;
+#5 A=4'd1;B=4'd2;control=4'd9;
+#5 A=4'd1;B=4'd2;control=4'd10;
+#5 A=4'd1;B=4'd2;control=4'd11;
+#5 $finish;
+
+end
+endmodule
+

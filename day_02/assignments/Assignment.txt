@@ -1,0 +1,71 @@
+PROBLEM 2: MEALY FSM
+Problem Definition: Implement a Mealy FSM with 2-bit state (Q1, Q0) and 1-bit input (ip). The output (op) is combinational and depends on both current state and input. Uses D flip-flops for state storage. 1001 Overlapping
+Code:
+module mealey_fsm(clk,rst,ip,op);
+input clk,rst;
+input ip;
+output op;
+
+wire ipb,d1,d0,q0,qb0,q1,qb1;
+assign ipb=~ip;
+
+assign d1=q1 & qb0 & ipb | qb1 & q0 &ipb;
+assign d0=q1 & qb0 | ip;
+assign op= q0 & q1 & ip;
+
+dff dff0(clk,rst,d0,q0,qb0);
+dff dff1(clk,rst,d1,q1,qb1);
+
+endmodule
+
+module mealey_tb();
+reg clk,rst;
+reg ip;
+wire op;
+
+mealey_fsm dut(clk,rst,ip,op);
+
+always #5 clk=~clk;
+
+initial begin
+clk=1'b0;
+rst=1'b0;
+ip=1'b0;
+#12; rst=1'b1;
+#12; rst=1'b0;
+
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b0;
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b0;
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b1;
+#7 ip=1'b0;
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b0;
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b0;
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b1;
+#7 ip=1'b0;
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b0;
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b0;
+#7 ip=1'b1;
+#7 ip=1'b1;
+#7 ip=1'b0;
+
+$finish;
+end
+
+endmodule
+
