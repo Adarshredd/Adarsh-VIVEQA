@@ -1,5 +1,5 @@
 # Ring Oscillator PUF Authentication System
-## A Physical Unclonable Function for FPGA-Based Device Authentication
+## Hardware Authentication Using Physical Unclonable Functions on FPGA
 
 ---
 
